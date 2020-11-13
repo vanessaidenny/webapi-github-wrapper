@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace webapi_restclient
+namespace webapi_github_wrapper.Models
 {
     public class Repository
     {

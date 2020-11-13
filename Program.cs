@@ -1,43 +1,26 @@
-﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json;
-using System.Threading.Tasks;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace webapi_restclient
+namespace webapi_github_wrapper
 {
-    class Program
+    public class Program
     {
-        private static readonly HttpClient client = new HttpClient();
-        
-        static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            var repositories = await ProcessRepositories();
-
-            foreach (var repo in repositories)
-            {
-                Console.WriteLine(repo.Name);
-                Console.WriteLine(repo.Description);
-                Console.WriteLine(repo.GitHubHomeUrl);
-                Console.WriteLine(repo.Homepage);
-                Console.WriteLine(repo.Watchers);
-                Console.WriteLine(repo.LastPush);
-                Console.WriteLine();
-            }
+            CreateHostBuilder(args).Build().Run();
         }
 
-        private static async Task<List<Repository>> ProcessRepositories()
-        {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-
-            var streamTask = client.GetStreamAsync("https://api.github.com/orgs/dotnet/repos");
-            var repositories = await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
-
-            return repositories;
-        }
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
