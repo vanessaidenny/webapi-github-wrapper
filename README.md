@@ -33,9 +33,11 @@ $ dotnet run
 <a name="documentation"></a>
 ### Documentation
 
-- [X] Create an application to request to a rest service on GitHub
+- [X] Create an application to request to a rest client on GitHub
 - [X] Build an web api to consume the requests
 - [ ] Implement a login parameter for an organization to return data
+- [ ] Cache data in memory - Implement InMemoryCache
+- [ ] Implement feature flags to enable or disable the cache
 
 <a name="references"></a>
 ## References
