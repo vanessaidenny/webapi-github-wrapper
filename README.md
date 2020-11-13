@@ -34,8 +34,8 @@ $ dotnet run
 ### Documentation
 
 - [X] Create an application to request to a rest service on GitHub
-- [X] Build web api
-- [ ] Construct web api to consume the requests
+- [X] Build an web api to consume the requests
+- [ ] Implement a login parameter for an organization to return data
 
 <a name="references"></a>
 ## References
