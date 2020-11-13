@@ -16,11 +16,11 @@ namespace webapi_github_wrapper.Controllers
     
     public class RepositoryController : ControllerBase
     {
-        private static readonly HttpClient client = new HttpClient();
+        private HttpClient client;        
 
         [HttpGet]
         [Route("/repositories/")]
-        private static async Task<List<Repository>> ProcessRepositories()
+        public async Task<List<Repository>> ProcessRepositories()
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
