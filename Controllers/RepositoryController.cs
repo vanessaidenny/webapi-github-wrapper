@@ -16,18 +16,19 @@ namespace webapi_github_wrapper.Controllers
     
     public class RepositoryController : ControllerBase
     {
-        private HttpClient client;        
+        private static readonly HttpClient client = new HttpClient();
 
         [HttpGet]
-        [Route("/repositories/")]
-        public async Task<List<Repository>> ProcessRepositories()
+        [Route("{organizationName}")]
+        public async Task<List<Repository>> ProcessRepositories(string organizationName)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
             client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
 
-            var streamTask = client.GetStreamAsync("https://api.github.com/orgs/dotnet/repos");
+            var login = $"https://api.github.com/orgs/{organizationName}/repos";
+            var streamTask = client.GetStreamAsync(login);
             var repositories = await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
 
             return repositories;
