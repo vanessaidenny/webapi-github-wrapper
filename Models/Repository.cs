@@ -17,6 +17,12 @@ namespace webapi_github_wrapper.Models
         [JsonPropertyName("homepage")]
         public Uri Homepage { get; set; }
         
+        [JsonPropertyName("language")]
+        public string Language { get; set; }
+
+        [JsonPropertyName("open_issues")]
+        public int OpenIssues { get; set; }
+
         [JsonPropertyName("watchers")]
         public int Watchers { get; set; }
 
