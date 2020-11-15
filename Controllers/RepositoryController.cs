@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using webapi_github_wrapper.Models;
 
@@ -17,6 +18,12 @@ namespace webapi_github_wrapper.Controllers
     public class RepositoryController : ControllerBase
     {
         private static readonly HttpClient client = new HttpClient();
+        private IMemoryCache _cache;
+
+        public RepositoryController(IMemoryCache memoryCache)
+        {
+            _cache = memoryCache;
+        }
 
         [HttpGet]
         [Route("{organizationName}")]
