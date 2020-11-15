@@ -17,11 +17,12 @@ namespace webapi_github_wrapper.Controllers
     
     public class RepositoryController : ControllerBase
     {
-        private static readonly HttpClient client = new HttpClient();
+        private HttpClient client;
         private IMemoryCache _cache;
 
-        public RepositoryController(IMemoryCache memoryCache)
+        public RepositoryController(HttpClient client, IMemoryCache memoryCache)
         {
+            this.client = client;
             _cache = memoryCache;
         }
 
