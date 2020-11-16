@@ -27,7 +27,7 @@ namespace webapi_github_wrapper.Controllers
         }
 
         [HttpGet]
-        [Route("{organizationName}")]
+        [Route("{organizationName}/repos")]
 
         public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
         {
