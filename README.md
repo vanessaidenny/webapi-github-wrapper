@@ -3,7 +3,7 @@
  
 # Web Api GitHub Wrapper
 
-Web Api with requests to the GitHub API on .NET projects
+Web Api with requests to the GitHub API
 
 ### Table of Contents
 
@@ -36,7 +36,7 @@ $ dotnet run
 - [X] Create an application to request to a rest client on GitHub
 - [X] Build an web api to consume the requests
 - [X] Implement a login parameter for an organization to return data
-- [ ] Cache data in memory - Implement InMemoryCache
+- [X] Cache data in memory - Implement InMemoryCache
 - [ ] Implement feature flags to enable or disable the cache
 
 <a name="references"></a>
