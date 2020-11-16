@@ -40,7 +40,7 @@ namespace webapi_github_wrapper.Controllers
             return cacheEntry;
         }
         
-        public async Task<List<Repository>> ProcessRepositories(string organizationName)
+        private async Task<List<Repository>> ProcessRepositories(string organizationName)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
