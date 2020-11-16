@@ -27,6 +27,18 @@ namespace webapi_github_wrapper.Controllers
 
         [HttpGet]
         [Route("{organizationName}")]
+
+        public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
+        {
+            var cacheEntry = await
+                _cache.GetOrCreateAsync(organizationName, entry =>
+                {
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(3);
+                    return ProcessRepositories(organizationName);
+                });
+            return cacheEntry;
+        }
+        
         public async Task<List<Repository>> ProcessRepositories(string organizationName)
         {
             client.DefaultRequestHeaders.Accept.Clear();
