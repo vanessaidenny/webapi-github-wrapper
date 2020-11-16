@@ -17,12 +17,13 @@ namespace webapi_github_wrapper.Controllers
     
     public class RepositoryController : ControllerBase
     {
-        private static readonly HttpClient client = new HttpClient();
-        private IMemoryCache _cache;
+        private HttpClient client;
+        private IMemoryCache cache;
 
-        public RepositoryController(IMemoryCache memoryCache)
+        public RepositoryController(HttpClient client, IMemoryCache memoryCache)
         {
-            _cache = memoryCache;
+            this.client = client;
+            this.cache = memoryCache;
         }
 
         [HttpGet]
@@ -31,7 +32,7 @@ namespace webapi_github_wrapper.Controllers
         public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
         {
             var cacheEntry = await
-                _cache.GetOrCreateAsync(organizationName, entry =>
+                cache.GetOrCreateAsync(organizationName, entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromSeconds(3);
                     return ProcessRepositories(organizationName);
