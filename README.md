@@ -7,25 +7,10 @@ Web Api with requests to the GitHub API
 
 ### Table of Contents
 
-- [Instructions for Use](#instructions)
 - [Features](#features)
   - [Documentation](#documentation)
 - [References](#references)
 - [License & Copyright](#license)
-
-<a name="instructions"></a>
-## 🚀 Instructions for Use
-
-```bash
-# clonar o repositório
-$ git clone https://github.com/vanessaidenny/webapi-github-wrapper.git
-
-# entrar no diretório
-$ cd bowling-game-score
-
-# iniciar o projeto
-$ dotnet run
-```
 
 <a name="features"></a>
 ## 📋 Features
