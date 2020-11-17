@@ -24,7 +24,7 @@ namespace webapi_github_wrapper.Controllers
         public RepositoryController(HttpClient client, IMemoryCache memoryCache, IFeatureManager featureManager)
         {
             this.client = client;
-            this.cache = memoryCache;
+            cache = memoryCache;
             this.featureManager = featureManager;
         }
 
@@ -40,10 +40,11 @@ namespace webapi_github_wrapper.Controllers
         public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
         {
             var cacheEntry = await
-                cache.GetOrCreateAsync(organizationName, entry =>
+                cache.GetOrCreateAsync(organizationName, async entry =>
                 {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(3);
-                    return ProcessRepositories(organizationName);
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(10);                    
+                    entry.SetPriority(CacheItemPriority.High);
+                    return await ProcessRepositories(organizationName);
                 });
             return cacheEntry;
         }
