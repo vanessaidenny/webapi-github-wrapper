@@ -36,19 +36,24 @@ namespace webapi_github_wrapper.Controllers
         [HttpGet]
         [Route("{organizationName}/repos")]
 
-        [FeatureGate(FeatureFlags.MemoryCache)]
         public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
         {
-            var cacheEntry = await
-                cache.GetOrCreateAsync(organizationName, async entry =>
-                {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(10);                    
-                    entry.SetPriority(CacheItemPriority.High);
-                    return await ProcessRepositories(organizationName);
-                });
-            return cacheEntry;
+            var isEnabled = featureManager.IsEnabledAsync(FeatureFlags.MemoryCache);
+            
+            if(await isEnabled) {
+                var cacheEntry = await
+                    cache.GetOrCreateAsync(organizationName, async entry =>
+                    {
+                        entry.SlidingExpiration = TimeSpan.FromSeconds(10);                    
+                        entry.SetPriority(CacheItemPriority.High);
+                        return await ProcessRepositories(organizationName);
+                    });
+                return cacheEntry;
+            } else {
+                return await ProcessRepositories(organizationName);
+            }
         }
-        
+
         private async Task<List<Repository>> ProcessRepositories(string organizationName)
         {
             client.DefaultRequestHeaders.Accept.Clear();
