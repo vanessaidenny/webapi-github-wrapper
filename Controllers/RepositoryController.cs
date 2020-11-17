@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.Mvc;
 using webapi_github_wrapper.Models;
 
 namespace webapi_github_wrapper.Controllers
@@ -27,8 +28,15 @@ namespace webapi_github_wrapper.Controllers
             this.featureManager = featureManager;
         }
 
+        public static class FeatureFlags
+        {
+            public const string MemoryCache = "MemoryCache";
+        }
+        
         [HttpGet]
         [Route("{organizationName}/repos")]
+
+        [FeatureGate(FeatureFlags.MemoryCache)]
         public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
         {
             var cacheEntry = await
