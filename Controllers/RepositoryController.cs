@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.FeatureManagement;
 using webapi_github_wrapper.Models;
 
 namespace webapi_github_wrapper.Controllers
@@ -17,16 +18,17 @@ namespace webapi_github_wrapper.Controllers
     {
         private HttpClient client;
         private IMemoryCache cache;
+        private IFeatureManager featureManager;
 
-        public RepositoryController(HttpClient client, IMemoryCache memoryCache)
+        public RepositoryController(HttpClient client, IMemoryCache memoryCache, IFeatureManager featureManager)
         {
             this.client = client;
             this.cache = memoryCache;
+            this.featureManager = featureManager;
         }
 
         [HttpGet]
         [Route("{organizationName}/repos")]
-
         public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
         {
             var cacheEntry = await
