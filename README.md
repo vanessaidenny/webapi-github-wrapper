@@ -22,7 +22,7 @@ Web Api with requests to the GitHub API
 - [X] Build an web api to consume the requests
 - [X] Implement a login parameter for an organization to return data
 - [X] Cache data in memory - Implement InMemoryCache
-- [ ] Implement feature flags to enable or disable the cache
+- [X] Implement feature flags to enable or disable the cache
 
 <a name="references"></a>
 ## References
