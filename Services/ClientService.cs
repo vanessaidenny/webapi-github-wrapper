@@ -9,17 +9,17 @@ namespace webapi_github_wrapper.Services
 {
     public class ClientService : IClientService
     {
-        private static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClient _client = new HttpClient();
         
         public async Task<List<Repository>> ClientRequest(string organizationName)
         {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+            _client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
 
             var login = $"https://api.github.com/orgs/{organizationName}/repos";
-            var streamTask = client.GetStreamAsync(login);
+            var streamTask = _client.GetStreamAsync(login);
             var repositories = await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
 
             return repositories;
