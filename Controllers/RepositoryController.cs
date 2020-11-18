@@ -15,17 +15,17 @@ namespace webapi_github_wrapper.Controllers
     
     public class RepositoryController : ControllerBase
     {       
-        private IMemoryCache cache;
-        private IFeatureManager featureManager;
-        private readonly IConfiguration configuration;
-        private readonly IClientService service;
+        private IMemoryCache _cache;
+        private IFeatureManager _featureManager;
+        private readonly IConfiguration _configuration;
+        private readonly IClientService _service;
 
-        public RepositoryController(IMemoryCache memoryCache, IFeatureManager featureManager, IConfiguration configuration, IClientService clientService)
+        public RepositoryController(IMemoryCache cache, IFeatureManager featureManager, IConfiguration configuration, IClientService service)
         {
-            cache = memoryCache;
-            this.featureManager = featureManager;
-            this.configuration = configuration;
-            service = clientService;
+            _cache = cache;
+            _featureManager = featureManager;
+            _configuration = configuration;
+            _service = service;
         }
 
         public static class FeatureFlags
@@ -37,11 +37,11 @@ namespace webapi_github_wrapper.Controllers
         [Route("{organizationName}/repos")]
         public async Task<ActionResult<List<Repository>>> GetRepositories(string organizationName)
         {
-            var cacheIsEnabled = featureManager.IsEnabledAsync(FeatureFlags.MemoryCache);
+            var cacheIsEnabled = _featureManager.IsEnabledAsync(FeatureFlags.MemoryCache);
             
             if(!await cacheIsEnabled)
             {
-                cache.Remove(organizationName);
+                _cache.Remove(organizationName);
             }
             return await ProcessByCache(organizationName);
         }
@@ -49,12 +49,12 @@ namespace webapi_github_wrapper.Controllers
         private async Task<List<Repository>> ProcessByCache(string organizationName)
         {
             var cacheEntry = await
-                cache.GetOrCreateAsync(organizationName, async entry =>
+                _cache.GetOrCreateAsync(organizationName, async entry =>
                 {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(configuration.
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(_configuration.
                         GetValue<double>("CacheManagement:SeatingSeconds"));
                     entry.SetPriority(CacheItemPriority.High);
-                    return await service.ClientRequest(organizationName);
+                    return await _service.ClientRequest(organizationName);
                 });
             return cacheEntry;
         }
