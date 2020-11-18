@@ -14,19 +14,18 @@ namespace webapi_github_wrapper.Controllers
     [Route("v1/github_wrapper")]
     
     public class RepositoryController : ControllerBase
-    {
-       
+    {       
         private IMemoryCache cache;
         private IFeatureManager featureManager;
         private readonly IConfiguration configuration;
-        private IClientService service;
+        private readonly IClientService service;
 
-        public RepositoryController(IMemoryCache memoryCache, IFeatureManager featureManager, 
-            IConfiguration configuration)
+        public RepositoryController(IMemoryCache memoryCache, IFeatureManager featureManager, IConfiguration configuration, IClientService clientService)
         {
             cache = memoryCache;
             this.featureManager = featureManager;
             this.configuration = configuration;
+            service = clientService;
         }
 
         public static class FeatureFlags
