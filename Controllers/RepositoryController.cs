@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
 using webapi_github_wrapper.Models;
 
@@ -19,27 +20,31 @@ namespace webapi_github_wrapper.Controllers
         private HttpClient client;
         private IMemoryCache cache;
         private IFeatureManager featureManager;
+        private readonly IConfiguration configuration;
 
-        public RepositoryController(HttpClient client, IMemoryCache memoryCache, IFeatureManager featureManager)
+        public RepositoryController(HttpClient client, IMemoryCache memoryCache, 
+        IFeatureManager featureManager, IConfiguration configuration)
         {
             this.client = client;
             cache = memoryCache;
             this.featureManager = featureManager;
+            this.configuration = configuration;
         }
 
         public static class FeatureFlags
         {
             public const string MemoryCache = "MemoryCache";
         }
-        
+
         [HttpGet]
         [Route("{organizationName}/repos")]
         public async Task<ActionResult<List<Repository>>> GetRepositories(string organizationName)
         {
             var cacheIsEnabled = featureManager.IsEnabledAsync(FeatureFlags.MemoryCache);
             
-            if(!await cacheIsEnabled) {
-		        cache.Remove(organizationName);
+            if(!await cacheIsEnabled)
+            {
+                cache.Remove(organizationName);
             }
             return await ProcessRepositories(organizationName);
         }
@@ -49,7 +54,7 @@ namespace webapi_github_wrapper.Controllers
             var cacheEntry = await
                 cache.GetOrCreateAsync(organizationName, async entry =>
                 {
-                    entry.SlidingExpiration = TimeSpan.FromDays(1);
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(configuration.GetValue<double>("CacheManagement:SeatingSeconds"));
                     entry.SetPriority(CacheItemPriority.High);
                     return await ClientRequest(organizationName);
                 });
