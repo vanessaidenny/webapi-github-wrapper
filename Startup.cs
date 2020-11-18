@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
+using webapi_github_wrapper.Services;
 
 namespace webapi_github_wrapper
 {
@@ -22,12 +23,13 @@ namespace webapi_github_wrapper
         {
             services.AddFeatureManagement();
             services.AddMemoryCache();
+            services.AddHttpClient();
             services.AddControllers();
+            services.AddTransient<IClientService, ClientService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "webapi_github_wrapper", Version = "v1" });
             });
-            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

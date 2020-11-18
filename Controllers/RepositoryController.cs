@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
 using webapi_github_wrapper.Models;
+using webapi_github_wrapper.Services;
 
 namespace webapi_github_wrapper.Controllers
 {
@@ -17,15 +15,15 @@ namespace webapi_github_wrapper.Controllers
     
     public class RepositoryController : ControllerBase
     {
-        private HttpClient client;
+       
         private IMemoryCache cache;
         private IFeatureManager featureManager;
         private readonly IConfiguration configuration;
+        private IClientService service;
 
-        public RepositoryController(HttpClient client, IMemoryCache memoryCache, 
-        IFeatureManager featureManager, IConfiguration configuration)
+        public RepositoryController(IMemoryCache memoryCache, IFeatureManager featureManager, 
+            IConfiguration configuration)
         {
-            this.client = client;
             cache = memoryCache;
             this.featureManager = featureManager;
             this.configuration = configuration;
@@ -46,33 +44,20 @@ namespace webapi_github_wrapper.Controllers
             {
                 cache.Remove(organizationName);
             }
-            return await ProcessRepositories(organizationName);
+            return await ProcessByCache(organizationName);
         }
 
-        private async Task<List<Repository>> ProcessRepositories(string organizationName)
+        private async Task<List<Repository>> ProcessByCache(string organizationName)
         {
             var cacheEntry = await
                 cache.GetOrCreateAsync(organizationName, async entry =>
                 {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(configuration.GetValue<double>("CacheManagement:SeatingSeconds"));
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(configuration.
+                        GetValue<double>("CacheManagement:SeatingSeconds"));
                     entry.SetPriority(CacheItemPriority.High);
-                    return await ClientRequest(organizationName);
+                    return await service.ClientRequest(organizationName);
                 });
             return cacheEntry;
-        }
-
-        private async Task<List<Repository>> ClientRequest(string organizationName)
-        {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-
-            var login = $"https://api.github.com/orgs/{organizationName}/repos";
-            var streamTask = client.GetStreamAsync(login);
-            var repositories = await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
-
-            return repositories;
         }
     }
 }
