@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.FeatureManagement;
-using Microsoft.FeatureManagement.Mvc;
 using webapi_github_wrapper.Models;
 
 namespace webapi_github_wrapper.Controllers
@@ -35,26 +34,29 @@ namespace webapi_github_wrapper.Controllers
         
         [HttpGet]
         [Route("{organizationName}/repos")]
-
-        public async Task<ActionResult<List<Repository>>> CacheGetOrCreate(string organizationName)
+        public async Task<ActionResult<List<Repository>>> GetRepositories(string organizationName)
         {
-            var isEnabled = featureManager.IsEnabledAsync(FeatureFlags.MemoryCache);
+            var cacheIsEnabled = featureManager.IsEnabledAsync(FeatureFlags.MemoryCache);
             
-            if(await isEnabled) {
-                var cacheEntry = await
-                    cache.GetOrCreateAsync(organizationName, async entry =>
-                    {
-                        entry.SlidingExpiration = TimeSpan.FromSeconds(10);                    
-                        entry.SetPriority(CacheItemPriority.High);
-                        return await ProcessRepositories(organizationName);
-                    });
-                return cacheEntry;
-            } else {
-                return await ProcessRepositories(organizationName);
+            if(!await cacheIsEnabled) {
+		        cache.Remove(organizationName);
             }
+            return await ProcessRepositories(organizationName);
         }
 
         private async Task<List<Repository>> ProcessRepositories(string organizationName)
+        {
+            var cacheEntry = await
+                cache.GetOrCreateAsync(organizationName, async entry =>
+                {
+                    entry.SlidingExpiration = TimeSpan.FromDays(1);
+                    entry.SetPriority(CacheItemPriority.High);
+                    return await ClientRequest(organizationName);
+                });
+            return cacheEntry;
+        }
+
+        private async Task<List<Repository>> ClientRequest(string organizationName)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
