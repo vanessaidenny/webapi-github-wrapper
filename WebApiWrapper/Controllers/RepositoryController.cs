@@ -48,20 +48,13 @@ namespace webapi_github_wrapper.Controllers
             {
                 _cache.Remove(organizationName);
             }
-            return await ProcessByCache(organizationName);
-        }
-
-        private async Task<List<Repository>> ProcessByCache(string organizationName)
-        {
-            var cacheEntry = await
-                _cache.GetOrCreateAsync(organizationName, async entry =>
-                {
-                    entry.SlidingExpiration = TimeSpan.FromSeconds(_configuration.
-                        GetValue<double>("CacheManagement:SeatingSeconds"));
-                    entry.SetPriority(CacheItemPriority.High);
-                    return await _service.ClientRequest(organizationName);
-                });
-            return cacheEntry;
+            return await _cache.GetOrCreateAsync(organizationName, async entry =>
+            {
+                entry.SlidingExpiration = TimeSpan.FromSeconds(_configuration.
+                    GetValue<double>("CacheManagement:SeatingSeconds"));
+                entry.SetPriority(CacheItemPriority.High);
+                return await _service.ClientRequest(organizationName);
+            });
         }
     }
 }
