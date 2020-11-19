@@ -20,7 +20,12 @@ namespace webapi_github_wrapper.Controllers
         private readonly IConfiguration _configuration;
         private readonly IClientService _service;
 
-        public RepositoryController(IMemoryCache cache, IFeatureManager featureManager, IConfiguration configuration, IClientService service)
+        public RepositoryController(
+            IMemoryCache cache,
+            IFeatureManager featureManager,
+            IConfiguration configuration,
+            IClientService service
+        )
         {
             _cache = cache;
             _featureManager = featureManager;
