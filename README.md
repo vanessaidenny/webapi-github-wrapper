@@ -9,6 +9,7 @@ Web Api with requests to the GitHub API
 
 - [Features](#features)
   - [Documentation](#documentation)
+  - [Testing](#testing)
 - [References](#references)
 - [License & Copyright](#license)
 
@@ -23,6 +24,13 @@ Web Api with requests to the GitHub API
 - [X] Implement a login parameter for an organization to return data
 - [X] Cache data in memory - Implement InMemoryCache
 - [X] Implement feature flags to enable or disable the cache
+
+<a name="testing"></a>
+### Testing
+
+1. Unit test
+2. Independent of interface and external services 
+3. Mock concept
 
 <a name="references"></a>
 ## References
