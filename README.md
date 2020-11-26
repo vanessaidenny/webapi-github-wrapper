@@ -14,7 +14,7 @@ Web Api with requests to the GitHub API
 - [License & Copyright](#license)
 
 <a name="features"></a>
-## 📋 Features
+## ⚙️ Features
 
 <a name="documentation"></a>
 ### Documentation
@@ -32,7 +32,7 @@ Web Api with requests to the GitHub API
 Use of mock concept - Independent of interface and external services
 
 <a name="references"></a>
-## References
+## 📚 References
 
 [REST client](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient#processing-the-json-result)  
 [Test HTTP with Moq](https://dev.to/gautemeekolsen/how-to-test-httpclient-with-moq-in-c-2ldp)
