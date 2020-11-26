@@ -1,5 +1,7 @@
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -15,10 +17,12 @@ namespace WebApiWrapper.Tests
         public async void ClientRequest_ShouldReturnResponse()
         {
             var handlerMock = new Mock<HttpMessageHandler>();
+            var assembly = Assembly.GetExecutingAssembly();
+            var jsonData = assembly.GetManifestResourceStream("WebApiWrapper.Tests.repos.json");
             var response = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(@"[{ ""name"": ""Name1"", ""description"": ""description1""}]"),
+                Content = new StreamContent(jsonData),
             };
             
             handlerMock
