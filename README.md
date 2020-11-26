@@ -34,7 +34,7 @@ Use of mock concept - Independent of interface and external services
 <a name="references"></a>
 ## References
 
-[REST client](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient#processing-the-json-result)
+[REST client](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient#processing-the-json-result)  
 [Test HTTP with Moq](https://dev.to/gautemeekolsen/how-to-test-httpclient-with-moq-in-c-2ldp)
 
 <a name="license"></a>
