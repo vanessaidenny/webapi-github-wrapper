@@ -12,27 +12,15 @@ namespace WebApiWrapper.Tests
 {
     public class ClientServiceTest
     {
+        private static Mock<HttpMessageHandler> handlerMock = new Mock<HttpMessageHandler>();
+        private ClientService clientService = new ClientService(
+            new HttpClient(handlerMock.Object)
+        );
+        
         [Fact]
         public async void ClientRequest_ShouldReturnResponse()
         {
-            var handlerMock = new Mock<HttpMessageHandler>();
-            var response = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(File.ReadAllText("../../../Data/repos.json")),
-            };
-            
-            handlerMock
-               .Protected()
-               .Setup<Task<HttpResponseMessage>>(
-                  "SendAsync",
-                  ItExpr.IsAny<HttpRequestMessage>(),
-                  ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(response);
-
-            var httpClient = new HttpClient(handlerMock.Object);
-            var clientService = new ClientService(httpClient);
-
+            GetFakeHttpClient(HttpStatusCode.OK);
             var retrievedPosts = await clientService.ClientRequest("dotnet");
 
             Assert.NotNull(retrievedPosts);
@@ -41,6 +29,25 @@ namespace WebApiWrapper.Tests
                Times.Exactly(1),
                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Get),
                ItExpr.IsAny<CancellationToken>());
+        }
+
+        public static Mock<HttpMessageHandler> GetFakeHttpClient(HttpStatusCode statusCode)
+        {
+            string jsondata = File.ReadAllText("../../../Data/repos.json");
+            
+            handlerMock
+               .Protected()
+               .Setup<Task<HttpResponseMessage>>(
+                  "SendAsync",
+                  ItExpr.IsAny<HttpRequestMessage>(),
+                  ItExpr.IsAny<CancellationToken>())
+               .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = statusCode,
+                Content = new StringContent(jsondata),
+            });
+
+            return handlerMock;
         }
     }
 }
