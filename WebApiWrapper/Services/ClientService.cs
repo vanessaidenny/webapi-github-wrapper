@@ -25,13 +25,7 @@ namespace webapi_github_wrapper.Services
         {
             var login = $"https://api.github.com/orgs/{organizationName}/repos";
             var streamTask = _client.GetStreamAsync(login);
-            try {
-                return await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
-            }
-            catch (HttpRequestException)
-            {
-                return null;
-            }
+            return await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
         }
     }
 
