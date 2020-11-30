@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -24,9 +25,13 @@ namespace webapi_github_wrapper.Services
         {
             var login = $"https://api.github.com/orgs/{organizationName}/repos";
             var streamTask = _client.GetStreamAsync(login);
-            var repositories = await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
-
-            return repositories;
+            try {
+                return await JsonSerializer.DeserializeAsync<List<Repository>>(await streamTask);
+            }
+            catch (HttpRequestException)
+            {
+                return null;
+            }
         }
     }
 
