@@ -42,6 +42,8 @@ namespace webapi_github_wrapper
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webapi_github_wrapper v1"));
             }
 
+            app.UseExceptionHandler("/error");
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
