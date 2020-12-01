@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -24,34 +21,14 @@ namespace WebApiWrapper.Tests
         public async void ClientRequest_ShouldReturnResponse()
         {
             GetFakeHttpClient(HttpStatusCode.OK);
-            var retrievedPosts = await clientService.ClientRequest("dotnet");
+            var response = await clientService.ClientRequest("dotnet");
 
-            Assert.NotNull(retrievedPosts);
+            Assert.NotNull(response);
             handlerMock.Protected().Verify(
                "SendAsync",
                Times.Exactly(1),
                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Get),
                ItExpr.IsAny<CancellationToken>());
-        }
-
-        [Fact]
-        public void ClientRequest_ModelValidation_ReturnsTrue()
-        {
-            var model = new webapi_github_wrapper.Models.Repository
-            {
-                Name = "",
-                GitHubHomeUrl = null,
-            };
-            var results = ValidateModel(model);
-            Assert.True(results.Any(v => v.ErrorMessage == "Required field"));
-        }
-
-        private List<ValidationResult> ValidateModel<T>(T model)
-        {
-            var context = new ValidationContext(model, null, null);
-            var result = new List<ValidationResult>();
-            var valid = Validator.TryValidateObject(model, context, result, true);
-            return result;
         }
 
         public static Mock<HttpMessageHandler> GetFakeHttpClient(HttpStatusCode statusCode)
