@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using webapi_github_wrapper.Services;
+using WebApiWrapper.Services;
 
 namespace webapi_github_wrapper
 {
@@ -33,7 +35,7 @@ namespace webapi_github_wrapper
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -41,9 +43,9 @@ namespace webapi_github_wrapper
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webapi_github_wrapper v1"));
             }
-
-            app.UseExceptionHandler("/error");
             
+            app.UseGlobalExceptionHandler(loggerFactory);
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
