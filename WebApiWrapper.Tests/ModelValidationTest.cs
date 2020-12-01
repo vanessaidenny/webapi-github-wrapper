@@ -9,7 +9,7 @@ namespace WebApiWrapper.Tests
     {
         
         [Fact]
-        public void ClientRequest_ModelValidation_ReturnsTrue()
+        public void ModelValidation_ReturnsTrue()
         {
             var model = new webapi_github_wrapper.Models.Repository
             {
