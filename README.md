@@ -24,7 +24,7 @@ Web Api with requests to the GitHub API
 - [X] Implement a login parameter for an organization to return data
 - [X] Cache data in memory - Implement InMemoryCache
 - [X] Implement feature flags to enable or disable the cache
-- [ ] Adaptation of scenarios when the API is unreachable and/or returns data other than expected
+- [X] Adaptation of scenarios when the API is unreachable and/or returns data other than expected
 
 <a name="testing"></a>
 ### Testing
