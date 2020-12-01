@@ -1,17 +1,21 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace webapi_github_wrapper.Models
 {
     public class Repository
     {
+        
         [JsonPropertyName("name")]
+        [Required(ErrorMessage = "Required field")]
         public string Name { get; set; }
 
         [JsonPropertyName("description")]
         public string Description { get; set; }
         
         [JsonPropertyName("html_url")]
+        [Required(ErrorMessage = "Required field")]
         public Uri GitHubHomeUrl { get; set; }
 
         [JsonPropertyName("homepage")]
