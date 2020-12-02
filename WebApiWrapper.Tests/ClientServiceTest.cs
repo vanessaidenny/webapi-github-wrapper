@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using Moq.Protected;
-using webapi_github_wrapper.Services;
+using WebApiWrapper.Services;
 using Xunit;
 
 namespace WebApiWrapper.Tests

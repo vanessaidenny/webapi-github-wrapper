@@ -6,10 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
-using webapi_github_wrapper.Services;
 using WebApiWrapper.Services;
 
-namespace webapi_github_wrapper
+namespace WebApiWrapper
 {
     public class Startup
     {

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
-using webapi_github_wrapper.Models;
-using webapi_github_wrapper.Services;
+using WebApiWrapper.Models;
+using WebApiWrapper.Services;
 
-namespace webapi_github_wrapper.Controllers
+namespace WebApiWrapper.Controllers
 {
     [ApiController]
     [Route("v1/github_wrapper")]

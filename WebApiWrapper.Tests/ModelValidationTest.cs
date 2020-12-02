@@ -11,7 +11,7 @@ namespace WebApiWrapper.Tests
         [Fact]
         public void ModelValidation_ReturnsTrue()
         {
-            var model = new webapi_github_wrapper.Models.Repository
+            var model = new WebApiWrapper.Models.Repository
             {
                 Name = "",
                 GitHubHomeUrl = null,

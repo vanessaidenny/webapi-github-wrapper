@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace webapi_github_wrapper
+namespace WebApiWrapper
 {
     public class Program
     {
